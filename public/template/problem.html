@@ -1,0 +1,5 @@
+<ol class="list-group">
+	<li class="list-group-item" ng-repeat="problem in problems">
+		<span class="glyphicon glyphicon-{{(problem[2])?(problem[3])?'ok':'remove':'asterisk'}}"></span> <a href="#problem/{{problem[0]}}">{{problem[1]}}</a><span class="pull-right badge">{{problem[2]}}</span>
+	</li>
+</ol>

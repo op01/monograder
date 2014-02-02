@@ -1,0 +1,209 @@
+<!--
+หาอะไรอยู่จ่ะ
+
+
+แข่งเขยีนโปรแกรมนะครัช ไม่ใช่แข่งแฮก
+หาไปก็ไม่ได้ช่วยอะไรหรอก
+เอาเวลาไปทำโจทย์เถอะครับ
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html ng-app="graderApp">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Monograder</title>
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <script src="js/jquery.min.js"></script>
+    <script src="js/angular.min.js"></script>
+    <script src="js/angular-route.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/app.js"></script>
+    <!--script src="js/chat.js"></script-->
+    <style>
+    body
+    {
+      padding-top: 60px;
+      padding-bottom: 60px;
+    }
+    </style>
+    <script>
+    var chaturl = "<%= url_for('chat')->to_abs %>";
+    </script>
+  </head>
+  <body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Monograder</a>
+        </div>
+        <div class="navbar-collapse collapse">
+        % if($userinfo){
+          <ul class="nav navbar-nav">
+            <li><a href="#">Home</a></li>
+            % if($userinfo->{username} eq 'admin'){
+              <li class="dropdown">
+              <a href="" class="dropdown-toggle" data-toggle="dropdown">Admin <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="#/admin/user">User</a></li>
+                <li><a href="#/admin/problem">Problem</a></li>
+                <li><a href="#/admin/testcase">Testcase</a></li>
+                <!--li class="divider"></li>
+                <li class="dropdown-header">Nav header</li>
+                <li><a href="#">Separated link</a></li>
+                <li><a href="#">One more separated link</a></li-->
+              </ul>
+            </li>
+            
+            % }
+
+            <li><a href="#/problem">Problem</a></li>
+            <li><a href="#/result">Result</a></li>
+            <li><a href="#/scoreboard">Scoreboard</a></li>
+            <li><a href="#/about">About</a></li>
+          </ul>
+          <div class="navbar-form navbar-right">
+          <a href="/logout"><button class="btn btn-primary">Sign out</button></a>
+          </div>
+         % }
+         % else{
+          <form class="navbar-form navbar-right" action="login" method="post">
+            <div class="form-group">
+              <input type="text" placeholder="Username" class="form-control" name="user">
+            </div>
+            <div class="form-group">
+              <input type="password" placeholder="Password" class="form-control" name="pass">
+            </div>
+            <button type="submit" class="btn btn-success">Sign in</button>
+          </form>
+          % }
+        </div><!--/.navbar-collapse -->
+      </div>
+    </div>
+    
+ <div class="container">
+      <div class="row row-offcanvas row-offcanvas-right">
+        <div class="col-md-12" ng-view>
+            loading
+        </div><!--/span-->
+        <!--div class="col-md-3">
+            <div class="well"></div>
+            <div class="well sidebar-nav" style="position:fixed;height:80%;">
+                <h2>Chat</h2>
+                <div class="container pre-scrollable" id="chat-output">
+                </div>
+                <div class="input-group">
+                    <input type="text" id="chat-input" class="form-control">
+                </div>
+            </div>
+        </div--><!--/span-->
+    </div><!--/row-->
+</div><!--/.container-->
+
+    
+
+    <footer class="navbar navbar-fixed-bottom">
+    <hr>
+    <div class="container">
+      <p class="text-muted"><span style="transform:rotate(180deg); display: inline-block;">&copy;</span> Copyleft OOP 2013</p>
+    </div>
+    </footer>
+    </body>
+</html>

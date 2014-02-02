@@ -1,0 +1,175 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+use feature "say";
+use DBI;
+use IPC::Run qw( run timeout);
+use FindBin;
+BEGIN { unshift @INC, "$FindBin::Bin/../lib" }
+BEGIN { $|=1;print "Perl $^V $^O\n";}
+
+die("Not linux!!!!\n") if $^O ne 'linux';
+
+sub sar
+{
+	my $txt = shift;
+	my $ret = '';
+	for(split "\n",$txt)
+	{
+		$_ =~ s/\s+$//;
+		$ret.=$_;
+		$ret.="\n";
+	}
+	$ret =~ s/\n+$//;
+	return $ret;
+}
+
+sub removeComment
+{
+	my $text = shift;
+	$text =~ s/\/\/.*$//gm;
+	$text =~ s/\/\*.*?\*\///gs;
+	return $text;
+}
+
+if(!fork)
+{
+	my $dbh = DBI->connect(          
+	    "dbi:SQLite:dbname=grader.db", 
+	    "",                          
+	    "",                          
+    	{ RaiseError => 1,sqlite_unicode => 1}        
+	) or die $DBI::errstr;
+	my $ppid = getppid;
+	say 'grader pid -> '.$$;
+	my $sth;
+	my $i;
+	while(1)
+	{
+		say 'grader breathing';
+		unless (kill 0, $ppid) {
+			print "grader exiting\n";
+			exit;#parent gone
+		} 
+		$sth = $dbh->prepare('select * from "submission" where "status"=\'waiting\' limit 1');
+		$sth->execute();
+		if(my $data = $sth->fetchrow_hashref())
+		{
+			my $result = '';
+			say localtime.' got data:';
+			say 'id '.$data->{sid};
+			say 'user '.$data->{uid};
+			say 'problem '.$data->{pid};
+			say '';
+			
+
+
+			open my $fh,">code.cpp";
+			print $fh $data->{code};
+			close $fh;
+			system 'g++','-static','code.cpp';
+			
+			if($?)#compile error
+			{
+				$result = "compile error";
+			}
+			else
+			{
+				say 'compile ok';
+				my @cmd;
+				@cmd = ('./a.out');
+				
+				#jail
+				system 'mv a.out root/a.out';
+				@cmd = ('chroot','root','./a.out');
+				#
+
+				$sth = $dbh->prepare('select * from "testcase" where "pid"=?');
+				$sth->bind_param(1,$data->{pid});
+				$sth->execute();
+				my $testcase = 1;
+				say 'start grading';
+				while(my $row = $sth->fetchrow_hashref())
+				{
+					say "testcase:$testcase";
+					my ($in,$out,$err);
+					$in = $row->{in};
+					
+					say 'start';
+					eval {
+						run \@cmd,\$in,\$out,\$err,timeout(1) or die "cat: $?";
+					};#blocking
+					say 'end';
+					if($@)
+					{
+						say 'runtime error/timeout detected';
+						$result .= 'X';
+					}
+					else
+					{
+						say 'end';
+
+						# $out =~ s/^[\s\n]+//m;
+						# $out =~ s/[\s\n]+$//m;
+						# $row->{out} =~ s/^[\s\n]+//m;
+						# $row->{out} =~ s/[\s\n]+$//m;
+						# $out =~ s/^[ ]+|[ ]+$//m;
+						# $row->{out} =~ s/^[ ]+|[ ]+$//m;
+						$out = sar($out);
+						$row->{out} = sar($row->{out});
+						if($out eq $row->{out})
+						{
+							$result .= "P";
+						}
+						else
+						{
+							$result .= "-";
+						}
+						print "ExpectOut:",$row->{out},"\n";
+						print "UserOut:",$out,"\n";
+					}
+					$testcase++;
+				}
+				say 'end grading';
+			}
+			if($result eq '')
+			{
+				$result = "No test case found!!";
+			}
+			say "Result:$result";
+		
+			if($result =~ /^P+$/)
+			{
+				say 'YES!!!!!';
+				$sth = $dbh->prepare('select count(*) from "yes" where "uid"=? and "pid"=?');
+				$sth->bind_param(1,$data->{uid});
+				$sth->bind_param(2,$data->{pid});
+				$sth->execute();
+				my $yescount = $sth->fetchrow_arrayref();
+				$yescount = $yescount->[0];
+				if($yescount)
+				{
+					say 'already yes';
+				}
+				else
+				{
+					say 'no record';
+					$sth = $dbh->prepare('insert into "yes" ("uid","pid") values (?,?)');
+					$sth->bind_param(1,$data->{uid});
+					$sth->bind_param(2,$data->{pid});
+					$sth->execute();
+				}
+			}
+			$sth = $dbh->prepare('update "submission" set "status"=\'graded\',"result"=? where "sid"=?');
+			$sth->bind_param(1,$result);
+			$sth->bind_param(2,$data->{sid});
+			$sth->execute();
+		}
+		sleep(3);
+	}
+	exit;
+}
+
+# Start command line interface for application
+require Mojolicious::Commands;
+Mojolicious::Commands->start_app('Monograder');

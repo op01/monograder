@@ -1,0 +1,9 @@
+<ul class="list-group">
+<li class="list-group-item" ng-repeat="testcase in testcases">
+	<form method="post" action="admin/testcase/{{testcase[0]}}">
+		<textarea name="in">{{testcase[1]}}</textarea>
+		<textarea name="out">{{testcase[2]}}</textarea>
+		<input type="submit" value="submit">
+	</form>
+</li>
+</ul>

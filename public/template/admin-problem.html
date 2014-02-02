@@ -1,0 +1,12 @@
+<form action="admin/problem" method="post" enctype="multipart/form-data">
+			<input type="text" name="title">
+			<input type="file" name="file">
+			<input type="submit" value="submit">
+</form>
+
+<ol class="list-group">
+	<li class="list-group-item" ng-repeat="problem in problems">
+		<a href="#admin/problem/{{problem[0]}}">{{problem[1]}}<a>
+		<a class="pull-right" href="admin/problem/{{problem[0]}}"><span class="glyphicon glyphicon-remove"></span></a>
+	</li>
+</ol>

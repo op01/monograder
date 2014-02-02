@@ -1,0 +1,18 @@
+<table class="table table-striped">
+	<tr>
+		<th>#</th>
+		<th>uid</th>
+		<th>pid</th>
+		<th>status</th>
+		<th>result</th>
+		<th>source</th>
+	</tr>
+	<tr ng-repeat="submit in result">
+		<td ng-repeat="data in submit">{{data}}</td>
+		<td><a href="/src/{{submit[0]}}"><span class="glyphicon glyphicon-eye-open"></span></a></td>
+	</tr>
+</table>
+<ul class="pager">
+  <li ng-click="nextPage()" ng-class="{disabled: currentPage == 0}"><a href="javascript:void(0)">Next</a></li>
+  <li ng-click="prevPage()" ng-class="{disabled: result.length == 0}"><a href="javascript:void(0)">Previous</a></li>
+</ul>

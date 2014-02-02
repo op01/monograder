@@ -1,0 +1,11 @@
+<form action="admin/testcase" method="post" enctype="multipart/form-data">
+	<input tupe="number" name="problem">
+	<input type="file" name="in">
+	<input type="file" name="out">
+	<input type="submit" value="submit">
+</form>
+<ol class="list-group">
+	<li class="list-group-item" ng-repeat="problem in problems">
+		<a href="#admin/testcase/{{problem[0]}}">{{problem[1]}}<a>
+	</li>
+</ol>

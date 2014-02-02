@@ -1,0 +1,26 @@
+<h1>{{detail[1]}}</h1>
+<p><a href="/problem/{{detail[0]}}/view/{{detail[1]}}.pdf"><button class="btn btn-info">View</button></a></p>
+
+<div class="well">
+<form action="submit" method="post" enctype="multipart/form-data" class="form-horizontal" role="form">
+  <div class="form-group">
+    <label class="col-md-2 control-label">Source code</label>
+    <div class="col-md-10">
+      <div class="fileinput fileinput-new" data-provides="fileinput">
+  <span class="btn btn-default btn-file"><span class="fileinput-new">Select file</span><span class="fileinput-exists">Change</span><input type="file" name="code"></span>
+  <span class="fileinput-filename"></span>
+  <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">&times;</a>
+</div>
+
+    </div>
+  </div>
+  
+    <div class="form-group">
+      <div class="col-md-offset-2 col-md-10">
+        <button type="submit" class="btn btn-default">Submit</button>
+      </div>
+    </div>
+
+  <input type="hidden" name="id" value="{{detail[0]}}">
+  </form>
+</div>
