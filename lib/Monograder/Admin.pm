@@ -1,5 +1,7 @@
 package Monograder::Admin;
 use Digest::MD5 qw(md5_hex);
+use Archive::Extract;
+use File::Slurp;
 use Mojo::Base 'Mojolicious::Controller';
 
 sub newuser{
@@ -53,6 +55,31 @@ sub problemedit {
 	$sth->bind_param(2,$self->param('id'));
 	$sth->execute();
 	$self->render(text => "OK");
+}
+sub testcasepack{
+    my $self = shift;
+    redirect_to('admin#newproblem') unless my $file=$self->param('file');
+    $file->move_to('testcase_tmp/file');
+    my $ae = Archive::Extract->new( archive => 'testcase_tmp/file',type=>'zip' );
+    $ae->extract(to=>'./testcase_tmp');
+    my $pid=$self->param('id');
+    my $sth=$self->db->prepare('delete from "testcase" where pid=?');
+    $sth->bind_param(1,$pid);
+    $sth->execute();
+    my $prefix="testcase_tmp/";
+    for(my $i=1;;$i++)
+    {
+        last unless -f $prefix.$i.".in" && -f $prefix.$i.".sol";
+        my $in=read_file($prefix.$i.".in");
+        my $out=read_file($prefix.$i.".sol");
+        $sth = $self->db->prepare('insert into "testcase" ("pid","in","out") values (?,?,?)');
+    	$sth->bind_param(1,$pid);
+    	$sth->bind_param(2,$in);
+    	$sth->bind_param(3,$out);
+    	$sth->execute();
+    }
+    unlink glob "testcase_tmp/*";
+    $self->render(text => "OK");
 }
 sub newtestcase {
 	my $self = shift;

@@ -38,5 +38,6 @@ sub startup {
   $admin->post('testcase')->to('admin#newtestcase');
   $admin->get('/testcase/:id')->to('admin#testcase');
   $admin->post('/testcase/:id')->to('admin#testcaseedit');
+  $admin->post('/testcase/pack/:id')->to('admin#testcasepack');
 }
 1;
