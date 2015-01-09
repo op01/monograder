@@ -1,10 +1,6 @@
 <table class="table table-bordered table-hover">
-	<tr>
-		<th>*</th>
-		<th ng-repeat="(problem,value) in problems">{{problem}}</th>
-	</tr>
-	<tr ng-repeat="user in score">
-	<th>{{user[0]}}</th>
-	<td ng-repeat="(problem,value) in problems" style="background:{{board[user[0]][problem][1]}};"></td>
+	<tr ng-repeat="user in data">
+	<td>{{user[0]}}</td>
+	<td>{{user[1]}}</td>
 	</tr>
 </table>

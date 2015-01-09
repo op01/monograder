@@ -73,32 +73,7 @@ function($scope, $routeParams,$http) {
 graderController.controller('scoreboardCtrl', ['$scope','$http',
 function($scope,$http) {
     $http.get('scoreboard').success(function(data) {
-        var board = {};
-        var problems = {};
-        var score = {};
-        var count = {};
-        for(var i in data)
-        {
-            if(typeof(board[data[i][0]])== 'undefined')board[data[i][0]] ={};
-            if(typeof(score[data[i][0]])=='undefined')score[data[i][0]]=0;
-            if(typeof(count[data[i][0]])=='undefined')count[data[i][0]]=0;
-            count[data[i][0]]+=(data[i][2])?1:0;		
-            score[data[i][0]]+=data[i][2];
-            problems[data[i][1]] = null;
-            board[data[i][0]][data[i][1]] = [data[i][2],(data[i][2])?"#66FF66":"#FF5050"];
-        }
-        var users = Object.keys(score);
-	   for(var i in users)
-    	{
-    		i = users[i];
-    		score[i] = -1000000*count[i]+score[i];
-    	}
-    	var sortable = [];
-        for (var vehicle in score)sortable.push([vehicle, score[vehicle]]);
-        sortable.sort(function(a, b) {return a[1] - b[1]});
-    	$scope.score  = sortable;
-        $scope.board = board;
-        $scope.problems =problems;
+        $scope.data =data;
     });
 }]);
 
