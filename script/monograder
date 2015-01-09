@@ -46,7 +46,7 @@ if(!fork)
 	my $i;
 	while(1)
 	{
-		say 'grader breathing';
+		#say 'grader breathing';
 		unless (kill 0, $ppid) {
 			print "grader exiting\n";
 			exit;#parent gone
