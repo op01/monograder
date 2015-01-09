@@ -1,7 +1,0 @@
-if ( apt-get -v ) then
-	sudo apt-get -y install build-essential
-fi
-
-if (perl -v) then
-	sudo perl -MCPAN -e 'CPAN::Shell->notest("install","Mojolicious","DBI","DBD::SQLite","IPC::Run");'
-fi
