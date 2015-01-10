@@ -55,11 +55,19 @@ sub submit
 sub result {
 	my $self = shift;
 	my $sth;
-	if($self->stash->{userinfo}->{username} eq 'admin'){$sth=$self->db->prepare('select "submission"."sid","user"."username","problem"."title","submission"."status","submission"."result" from "submission" inner join "user" inner join "problem" on "submission"."uid"="user"."uid" and "submission"."pid"="problem"."pid" order by "sid" desc limit ? ,?');}
-	else{$sth=$self->db->prepare('select "submission"."sid","user"."username","problem"."title","submission"."status","submission"."result" from "submission" inner join "user" inner join "problem" on "submission"."uid"="user"."uid" and "submission"."pid"="problem"."pid" where "submission"."uid" = ? order by "sid" desc limit ? ,?');}
+	my $resultperpage=10;
+	if($self->stash->{userinfo}->{username} eq 'admin')
+	{
+	    $sth=$self->db->prepare('select "submission"."sid","user"."username","problem"."title","submission"."status","submission"."result" from "submission" inner join "user" inner join "problem" on "submission"."uid"="user"."uid" and "submission"."pid"="problem"."pid" order by "sid" desc limit ? ,?');
+	    $sth->bind_param(1,$self->param('page')*10);
+	    $sth->bind_param(2,$resultperpage);
+	}
+	else{
+    $sth=$self->db->prepare('select "submission"."sid","user"."username","problem"."title","submission"."status","submission"."result" from "submission" inner join "user" inner join "problem" on "submission"."uid"="user"."uid" and "submission"."pid"="problem"."pid" where "submission"."uid" = ? order by "sid" desc limit ? ,?');
 	$sth->bind_param(1,$self->stash->{userinfo}->{uid});
 	$sth->bind_param(2,$self->param('page')*10);
-	$sth->bind_param(3,10);
+	$sth->bind_param(3,$resultperpage);
+	   }
 	$sth->execute();
 	$self->render(json=>$sth->fetchall_arrayref);
 }
