@@ -74,6 +74,17 @@ function($scope, $routeParams,$http) {
 graderController.controller('resultCtrl', ['$scope','$http',
 function($scope,$http) {
     $scope.currentPage = 0;
+    $scope.modalCurrentCode = "";
+    $scope.modalCurrentId = -1;
+    $scope.showCode = function(i)
+    {
+        $scope.modalCurrentId = $scope.result[i][0];
+        $http.get('src/'+$scope.modalCurrentId).success(function(data) {
+            $scope.modalCurrentCode = data;
+            $("#codeModal").modal();
+            color("mycode",data);
+        });
+    }
     $scope.reloadData =  function() {
         $http.get('result/'+$scope.currentPage).success(function(data) {
             $scope.result = data;

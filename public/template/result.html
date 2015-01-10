@@ -7,12 +7,29 @@
 		<th>result</th>
 		<th>source</th>
 	</tr>
-	<tr ng-repeat="submit in result">
+	<tr ng-repeat="(i,submit) in result">
 		<td ng-repeat="data in submit">{{data}}</td>
-		<td><a href="/src/{{submit[0]}}"><span class="glyphicon glyphicon-eye-open"></span></a></td>
+		<td><a ng-click="showCode(i)"><span class="glyphicon glyphicon-eye-open"></span></a></td>
 	</tr>
 </table>
 <ul class="pager">
   <li ng-click="nextPage()" ng-class="{disabled: currentPage == 0}"><a href="javascript:void(0)">Next</a></li>
   <li ng-click="prevPage()" ng-class="{disabled: result.length == 0}"><a href="javascript:void(0)">Previous</a></li>
 </ul>
+<div class="modal fade" id="codeModal" tabindex="-1" role="dialog" aria-labelledby="codeModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="codeModalLabel">Source code</h4>
+      </div>
+      <div class="modal-body">
+        <pre id="mycode" class="code">{{modalCurrentCode}}</pre>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <a class="btn btn-primary" ng-href="src/{{modalCurrentId}}">View raw</a>
+      </div>
+    </div>
+  </div>
+</div>
