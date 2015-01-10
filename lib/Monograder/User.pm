@@ -61,13 +61,6 @@ sub result {
 	$self->render(json=>$sth->fetchall_arrayref);
 }
 
-sub scoreboard{
-	my $self = shift;
-	my $sth = $self->db->prepare('select "user"."username",count("yes"."yid") from "user" left join "yes" on "yes"."uid"="user"."uid" group by "user"."uid"');
-	$sth->execute();
-	$self->render(json=>$sth->fetchall_arrayref());
-}
-
 sub viewsrc{
 	my $self = shift;
 	my $sth = $self->db->prepare('select "uid","code" from "submission" where "sid"=?');

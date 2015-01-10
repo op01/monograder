@@ -145,6 +145,7 @@
                 <li><a href="#/admin/user">User</a></li>
                 <li><a href="#/admin/problem">Problem</a></li>
                 <li><a href="#/admin/testcase">Testcase</a></li>
+                <li><a href="#/admin/scoreboard">Scoreboard</a></li>
                 <!--li class="divider"></li>
                 <li class="dropdown-header">Nav header</li>
                 <li><a href="#">Separated link</a></li>
@@ -156,7 +157,6 @@
 
             <li><a href="#/problem">Problem</a></li>
             <li><a href="#/result">Result</a></li>
-            <li><a href="#/scoreboard">Scoreboard</a></li>
             <li><a href="#/about">About</a></li>
           </ul>
           <div class="navbar-form navbar-right">

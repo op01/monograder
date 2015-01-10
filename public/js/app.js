@@ -18,13 +18,13 @@ when('/problem/:id', {
 templateUrl: 'template/problem-id.html',
 controller: 'problemidCtrl'
 }).
-when('/scoreboard', {
-templateUrl: 'template/scoreboard.html',
-controller: 'scoreboardCtrl'
-}).
 when('/result', {
 templateUrl: 'template/result.html',
 controller: 'resultCtrl'
+}).
+when('/admin/scoreboard', {
+templateUrl: 'template/scoreboard.html',
+controller: 'adminScoreboardCtrl'
 }).
 when('/admin/user', {
 templateUrl: 'template/admin-user.html',
@@ -70,13 +70,6 @@ function($scope, $routeParams,$http) {
         $scope.detail = data;
     });
 }]);
-graderController.controller('scoreboardCtrl', ['$scope','$http',
-function($scope,$http) {
-    $http.get('scoreboard').success(function(data) {
-        $scope.data =data;
-    });
-}]);
-
 
 graderController.controller('resultCtrl', ['$scope','$http',
 function($scope,$http) {
@@ -102,7 +95,12 @@ function($scope,$http) {
     };
     $scope.reloadData();
 }]);
-
+graderController.controller('adminScoreboardCtrl', ['$scope','$http',
+function($scope,$http) {
+    $http.get('admin/scoreboard').success(function(data) {
+        $scope.data =data;
+    });
+}]);
 graderController.controller('adminUserCtrl', ['$scope','$http','$route',
 function($scope,$http,$route) {
     $http.get('admin/user').success(function(data) {

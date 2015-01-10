@@ -4,6 +4,13 @@ use Archive::Extract;
 use File::Slurp;
 use Mojo::Base 'Mojolicious::Controller';
 
+sub scoreboard{
+	my $self = shift;
+	my $sth = $self->db->prepare('select "user"."username",count("yes"."yid") from "user" left join "yes" on "yes"."uid"="user"."uid" group by "user"."uid"');
+	$sth->execute();
+	$self->render(json=>$sth->fetchall_arrayref());
+}
+
 sub newuser{
 	my $self = shift;
 	my $user = $self->param('user');

@@ -27,7 +27,6 @@ sub startup {
   $r->post('/submit')->to('user#submit');
   $r->get('/result/:page')->to('user#result');
   $r->get('/src/:id')->to('user#viewsrc');
-  $r->get('/scoreboard')->to('user#scoreboard');
   my $admin = $r->under('/admin')->to('auth#admin');
   $admin->get('/user')->to('admin#user');
   $admin->post('/user')->to('admin#newuser');
@@ -35,6 +34,7 @@ sub startup {
   $admin->post('/problem')->to('admin#newproblem');
   $admin->post('/problem/:id')->to('admin#problemedit');
   $admin->get('/problem/:id')->to('admin#removeproblem');
+  $admin->get('/scoreboard')->to('admin#scoreboard');
   $admin->post('testcase')->to('admin#newtestcase');
   $admin->get('/testcase/:id')->to('admin#testcase');
   $admin->post('/testcase/:id')->to('admin#testcaseedit');
