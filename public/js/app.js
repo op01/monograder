@@ -10,6 +10,10 @@ when('/home', {
 templateUrl: 'template/home.html',
 controller: 'homeCtrl'
 }).
+when('/about', {
+templateUrl: 'template/about.html',
+controller: 'aboutCtrl'
+}).
 when('/problem', {
 templateUrl: 'template/problem.html',
 controller: 'problemCtrl'
@@ -50,6 +54,19 @@ otherwise({
 redirectTo: '/home'
 });
 }]);
+
+graderApp.factory('httpRequestInterceptor', function () {
+return {
+request: function (config) {
+config.url+= "?cache_fix="+Math.random().toString();
+return config;
+}
+};
+});
+ 
+graderApp.config(function ($httpProvider) {
+$httpProvider.interceptors.push('httpRequestInterceptor');
+}); 
 
 var graderController = angular.module('graderController', []);
  
