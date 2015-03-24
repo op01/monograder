@@ -1,3 +1,6 @@
+/*
+Credit: https://github.com/phizaz/otog 
+*/ 
 function isAlpha(input)
 {
 	return ('A' <= input && input <= 'Z') || ('a' <= input && input <= 'z') || (input == '_');
