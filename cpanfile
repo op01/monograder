@@ -5,3 +5,5 @@ requires "IPC::Run","0.94";
 requires "Archive::Extract","0.74";
 requires "File::Slurp","9999.19";
 requires "Archive::Zip";
+requires "Plack";
+requires "Plack::Middleware::Deflater";
